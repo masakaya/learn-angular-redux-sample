@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 質問とディスカッション
+    url: https://github.com/masakaya/learn-angular-todo-sample/discussions
+    about: こちらで質問をしたり回答したりしてください。
+  - name: ドキュメント
+    url: https://github.com/masakaya/learn-angular-todo-sample#readme
+    about: 基本的なドキュメントについてはREADMEをご確認ください。

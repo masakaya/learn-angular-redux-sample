@@ -1,0 +1,20 @@
+{
+	"name": "Angular Development",
+	"containerName": "flux-sample",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"remoteUser": "root",
+	"forwardPorts": [4200],
+	"appPort": [4200],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"angular.ng-template",
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode"
+			]
+		}
+	},
+	"postCreateCommand": "npm install"
+}

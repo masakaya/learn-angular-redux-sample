@@ -1,0 +1,27 @@
+<div class="todo-list-container">
+  <h1>Todo List</h1>
+
+  <div class="add-todo-form">
+    <input
+      type="text"
+      [(ngModel)]="newTodoTitle"
+      placeholder="Add a new todo..."
+      class="todo-input"
+      (keyup.enter)="addTodo()"
+    >
+    <button class="add-btn" (click)="addTodo()">Add</button>
+  </div>
+
+  <div class="todos-container">
+    <div *ngIf="todos.length === 0" class="empty-state">
+      No todos yet. Add one above!
+    </div>
+
+    <app-todo-item
+      *ngFor="let todo of todos"
+      [todo]="todo"
+      (toggleTodo)="toggleTodo($event)"
+      (deleteTodo)="deleteTodo($event)"
+    ></app-todo-item>
+  </div>
+</div>
