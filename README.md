@@ -31,20 +31,20 @@ graph TD
     D -->|Notifies| A
 
     subgraph "Authフロー"
-    A1[LoginComponent] -->|login()| B1[LOGIN_REQUEST]
+    A1[LoginComponent] -->|login| B1[LOGIN_REQUEST]
     B1 --> B2[LOGIN_SUCCESS/FAILURE]
     B2 -->|Updates| C1[authReducer]
     C1 -->|Updates| D
-    D -->|selectIsLoggedIn()| A1
+    D -->|selectIsLoggedIn| A1
     end
 
     subgraph "Todoフロー"
-    A2[TodoListComponent] -->|addTodo()| B3[ADD_TODO]
-    A2 -->|toggleTodo()| B4[TOGGLE_TODO]
-    A2 -->|deleteTodo()| B5[DELETE_TODO]
+    A2[TodoListComponent] -->|addTodo| B3[ADD_TODO]
+    A2 -->|toggleTodo| B4[TOGGLE_TODO]
+    A2 -->|deleteTodo| B5[DELETE_TODO]
     B3 & B4 & B5 -->|Updates| C2[todoReducer]
     C2 -->|Updates| D
-    D -->|selectTodos()| A2
+    D -->|selectTodos| A2
     end
 ```
 
