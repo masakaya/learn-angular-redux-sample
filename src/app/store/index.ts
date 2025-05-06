@@ -1,6 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { Store } from 'redux';
-import { thunk } from 'redux-thunk';
 import { authReducer, AuthState } from './auth/auth.reducer';
 import { todoReducer, TodoState } from './todo/todo.reducer';
 
@@ -11,16 +9,13 @@ export interface AppState {
 }
 
 // Configure the store
-export function configureAppStore(): Store<AppState> {
-  return configureStore({
-    reducer: {
-      auth: authReducer,
-      todo: todoReducer
-    },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(thunk)
-  });
-}
+export const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    todo: todoReducer
+  }
+});
 
-// Create a singleton store instance
-export const store = configureAppStore();
+// Export types for TypeScript
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
