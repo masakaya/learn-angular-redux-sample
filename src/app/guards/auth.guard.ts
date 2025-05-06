@@ -1,13 +1,13 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, take } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
+import { AuthStoreService } from '../services/auth/auth-store.service';
 
 export const authGuard = () => {
-  const authService = inject(AuthService);
+  const authStoreService = inject(AuthStoreService);
   const router = inject(Router);
 
-  return authService.isLoggedIn.pipe(
+  return authStoreService.selectIsLoggedIn().pipe(
     take(1),
     map(isLoggedIn => {
       if (isLoggedIn) {

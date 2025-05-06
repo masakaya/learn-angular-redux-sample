@@ -1,105 +1,147 @@
 # learn-angular-redux-sample
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.10.
+このプロジェクトは [Angular CLI](https://github.com/angular/angular-cli) バージョン 19.2.10 を使用して生成されました。
 
-## Screen Flow Diagram
+## 画面フロー図
 
 ```mermaid
 graph TD
-    A[Login Screen] -->|Successful Login| B[Todo List Screen]
-    B -->|Logout| A
+    A[ログイン画面] -->|ログイン成功| B[Todoリスト画面]
+    B -->|ログアウト| A
 
-    subgraph "Login Screen Actions"
-    A1[Enter Email] --> A2[Enter Password] --> A3[Submit Login]
+    subgraph "ログイン画面のアクション"
+    A1[メールアドレス入力] --> A2[パスワード入力] --> A3[ログイン送信]
     end
 
-    subgraph "Todo List Screen Actions"
-    B1[Add New Todo] --> B
-    B2[Toggle Todo Completion] --> B
-    B3[Delete Todo] --> B
-    B4[Logout] --> A
+    subgraph "Todoリスト画面のアクション"
+    B1[新しいTodoを追加] --> B
+    B2[Todo完了状態の切り替え] --> B
+    B3[Todoの削除] --> B
+    B4[ログアウト] --> A
     end
 ```
 
-## Screen Descriptions
+## Reduxデータフロー
 
-### Login Screen
-- **Enter Email**: Input field for user email
-- **Enter Password**: Input field for user password
-- **Submit Login**: Button to authenticate user credentials
+```mermaid
+graph TD
+    A[Component] -->|Dispatch Action| B[Action]
+    B -->|Processed by| C[Reducer]
+    C -->|Updates| D[Store]
+    D -->|Notifies| A
 
-### Todo List Screen
-- **Add New Todo**: Input field and button to create a new todo item
-- **Toggle Todo Completion**: Checkbox to mark a todo as complete or incomplete
-- **Delete Todo**: Button to remove a todo from the list
-- **Logout**: Button to end the current session and return to the login screen
+    subgraph "Authフロー"
+    A1[LoginComponent] -->|login()| B1[LOGIN_REQUEST]
+    B1 --> B2[LOGIN_SUCCESS/FAILURE]
+    B2 -->|Updates| C1[authReducer]
+    C1 -->|Updates| D
+    D -->|selectIsLoggedIn()| A1
+    end
 
-## Development Container
+    subgraph "Todoフロー"
+    A2[TodoListComponent] -->|addTodo()| B3[ADD_TODO]
+    A2 -->|toggleTodo()| B4[TOGGLE_TODO]
+    A2 -->|deleteTodo()| B5[DELETE_TODO]
+    B3 & B4 & B5 -->|Updates| C2[todoReducer]
+    C2 -->|Updates| D
+    D -->|selectTodos()| A2
+    end
+```
 
-This project includes a devcontainer configuration for Visual Studio Code. The devcontainer provides a consistent development environment with:
+## Reduxに関連するファイル
+
+### ストア設定
+- **src/app/store/index.ts**: Reduxストアの設定ファイル。authReducerとtodoReducerを組み合わせて、アプリケーションのルートストアを作成します。
+
+### 認証関連
+- **src/app/store/auth/auth.actions.ts**: 認証に関するアクション（ログイン、ログアウトなど）を定義します。
+- **src/app/store/auth/auth.reducer.ts**: 認証状態を管理するリデューサー。
+- **src/app/services/auth/auth-store.service.ts**: 認証関連のRedux操作をカプセル化するサービス。
+
+### Todo関連
+- **src/app/store/todo/todo.actions.ts**: Todo操作に関するアクション（追加、削除など）を定義します。
+- **src/app/store/todo/todo.reducer.ts**: Todo状態を管理するリデューサー。
+- **src/app/services/todo/todo-store.service.ts**: Todo関連のRedux操作をカプセル化するサービス。
+
+## 画面説明
+
+### ログイン画面
+- **メールアドレス入力**: ユーザーのメールアドレスを入力するフィールド
+- **パスワード入力**: ユーザーのパスワードを入力するフィールド
+- **ログイン送信**: ユーザー認証情報を送信するボタン
+
+### Todoリスト画面
+- **新しいTodoを追加**: 新しいTodoアイテムを作成するための入力フィールドとボタン
+- **Todo完了状態の切り替え**: Todoを完了または未完了としてマークするチェックボックス
+- **Todoの削除**: リストからTodoを削除するボタン
+- **ログアウト**: 現在のセッションを終了してログイン画面に戻るボタン
+
+## 開発コンテナ
+
+このプロジェクトには、Visual Studio Code用のdevcontainer設定が含まれています。devcontainerは以下の機能を備えた一貫した開発環境を提供します：
 
 - Node.js 20
-- Angular CLI pre-installed
-- Port 4200 forwarded for the development server
-- Root user access
+- Angular CLIがプリインストール済み
+- 開発サーバー用にポート4200が転送済み
+- ルートユーザーアクセス
 
-To use the devcontainer:
-1. Install the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension in VS Code
-2. Open the project in VS Code
-3. Click on the green button in the bottom-left corner and select "Reopen in Container"
+devcontainerを使用するには：
+1. VS Codeに[Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)拡張機能をインストールします
+2. VS Codeでプロジェクトを開きます
+3. 左下隅の緑色のボタンをクリックし、「コンテナーで再度開く」を選択します
 
-## Development server
+## 開発サーバー
 
-To start a local development server, run:
+ローカル開発サーバーを起動するには、次のコマンドを実行します：
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+サーバーが起動したら、ブラウザで`http://localhost:4200/`にアクセスしてください。ソースファイルを変更すると、アプリケーションは自動的に再読み込みされます。
 
-## Code scaffolding
+## コードスキャフォールディング
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Angular CLIには強力なコードスキャフォールディングツールが含まれています。新しいコンポーネントを生成するには、次のコマンドを実行します：
 
 ```bash
-ng generate component component-name
+ng generate component コンポーネント名
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+利用可能なスキーマティック（`components`、`directives`、`pipes`など）の完全なリストを表示するには、次のコマンドを実行します：
 
 ```bash
 ng generate --help
 ```
 
-## Building
+## ビルド
 
-To build the project run:
+プロジェクトをビルドするには、次のコマンドを実行します：
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+これによりプロジェクトがコンパイルされ、ビルド成果物が`dist/`ディレクトリに格納されます。デフォルトでは、本番ビルドはパフォーマンスと速度のためにアプリケーションを最適化します。
 
-## Running unit tests
+## ユニットテストの実行
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+[Karma](https://karma-runner.github.io)テストランナーでユニットテストを実行するには、次のコマンドを使用します：
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## エンドツーエンドテストの実行
 
-For end-to-end (e2e) testing, run:
+エンドツーエンド（e2e）テストを実行するには：
 
 ```bash
 ng e2e
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Angular CLIにはデフォルトでエンドツーエンドテストフレームワークが含まれていません。ニーズに合ったものを選択できます。
 
-## Additional Resources
+## 追加リソース
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Angular CLIの使用方法に関する詳細情報（詳細なコマンドリファレンスを含む）については、[Angular CLI概要とコマンドリファレンス](https://angular.dev/tools/cli)ページをご覧ください。
