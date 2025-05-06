@@ -1,6 +1,38 @@
-# FluxSample
+# learn-angular-redux-sample
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.10.
+
+## Screen Flow Diagram
+
+```mermaid
+graph TD
+    A[Login Screen] -->|Successful Login| B[Todo List Screen]
+    B -->|Logout| A
+
+    subgraph "Login Screen Actions"
+    A1[Enter Email] --> A2[Enter Password] --> A3[Submit Login]
+    end
+
+    subgraph "Todo List Screen Actions"
+    B1[Add New Todo] --> B
+    B2[Toggle Todo Completion] --> B
+    B3[Delete Todo] --> B
+    B4[Logout] --> A
+    end
+```
+
+## Screen Descriptions
+
+### Login Screen
+- **Enter Email**: Input field for user email
+- **Enter Password**: Input field for user password
+- **Submit Login**: Button to authenticate user credentials
+
+### Todo List Screen
+- **Add New Todo**: Input field and button to create a new todo item
+- **Toggle Todo Completion**: Checkbox to mark a todo as complete or incomplete
+- **Delete Todo**: Button to remove a todo from the list
+- **Logout**: Button to end the current session and return to the login screen
 
 ## Development Container
 

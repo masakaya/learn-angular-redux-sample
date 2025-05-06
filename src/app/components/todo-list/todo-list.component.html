@@ -1,5 +1,11 @@
 <div class="todo-list-container">
-  <h1>Todo List</h1>
+  <header class="todo-header">
+    <h1>Todo List</h1>
+    <div class="user-info" *ngIf="currentUser">
+      <span class="welcome-message">Welcome, {{ currentUser.name }}</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </header>
 
   <div class="add-todo-form">
     <input
