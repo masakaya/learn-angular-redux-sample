@@ -1,12 +1,12 @@
-import { Injectable, inject, runInInjectionContext, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { injectStore, injectDispatch, injectSelector } from '@reduxjs/angular-redux';
+import { injectStore, injectDispatch } from '@reduxjs/angular-redux';
 import { AppState } from '../../store';
 import { User, LoginRequest } from '../../models/user.model';
 import * as AuthActions from '../../store/auth/auth.actions';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
+import { AuthSelectorsService } from './auth-selectors.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +16,10 @@ export class AuthStoreService {
 
   private store = injectStore<AppState>();
   private dispatch = injectDispatch();
-  private injector = inject(Injector);
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private authSelectors: AuthSelectorsService
   ) {
     this.initializeStore();
   }
@@ -65,25 +65,20 @@ export class AuthStoreService {
   }
 
   // Selectors
-  private userSignal = injectSelector<AppState, User | null>(state => state.auth.user);
-  private isLoggedInSignal = injectSelector<AppState, boolean>(state => !!state.auth.token);
-  private authLoadingSignal = injectSelector<AppState, boolean>(state => state.auth.loading);
-  private authErrorSignal = injectSelector<AppState, any>(state => state.auth.error);
-
   selectUser(): Observable<User | null> {
-    return runInInjectionContext(this.injector, () => toObservable(this.userSignal));
+    return this.authSelectors.selectUser();
   }
 
   selectIsLoggedIn(): Observable<boolean> {
-    return runInInjectionContext(this.injector, () => toObservable(this.isLoggedInSignal));
+    return this.authSelectors.selectIsLoggedIn();
   }
 
   selectAuthLoading(): Observable<boolean> {
-    return runInInjectionContext(this.injector, () => toObservable(this.authLoadingSignal));
+    return this.authSelectors.selectAuthLoading();
   }
 
   selectAuthError(): Observable<any> {
-    return runInInjectionContext(this.injector, () => toObservable(this.authErrorSignal));
+    return this.authSelectors.selectAuthError();
   }
 
   // Private methods

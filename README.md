@@ -23,19 +23,25 @@ graph TD
 
 ## Reduxデータフロー
 
+Reduxでは、Selectorはストアの変更を検知し、コンポーネントに必要なデータを提供します。Selectorはストアの状態が変更されると自動的に再計算され、関連するコンポーネントに通知します。
+
+通常、ReduxではDispatcherは存在せず、store.dispatch()関数を利用します。angular-reduxではDispatcherが存在し、アクションをストアに送信する役割を担っています。
+
 ```mermaid
 graph TD
     A[Component] -->|Dispatch Action| B[Action]
     B -->|Processed by| C[Reducer]
     C -->|Updates| D[Store]
-    D -->|Notifies| A
+    D -->|State Changes| E[Selector]
+    E -->|Notifies| A
 
     subgraph "Authフロー"
     A1[LoginComponent] -->|login| B1[LOGIN_REQUEST]
     B1 --> B2[LOGIN_SUCCESS/FAILURE]
     B2 -->|Updates| C1[authReducer]
     C1 -->|Updates| D
-    D -->|selectIsLoggedIn| A1
+    D -->|State Changes| E1[AuthSelector]
+    E1 -->|selectIsLoggedIn| A1
     end
 
     subgraph "Todoフロー"
@@ -44,7 +50,8 @@ graph TD
     A2 -->|deleteTodo| B5[DELETE_TODO]
     B3 & B4 & B5 -->|Updates| C2[todoReducer]
     C2 -->|Updates| D
-    D -->|selectTodos| A2
+    D -->|State Changes| E2[TodoSelector]
+    E2 -->|selectTodos| A2
     end
 ```
 
@@ -62,6 +69,7 @@ graph TD
 - **src/app/store/todo/todo.actions.ts**: Todo操作に関するアクション（追加、削除など）を定義します。
 - **src/app/store/todo/todo.reducer.ts**: Todo状態を管理するリデューサー。
 - **src/app/services/todo/todo-store.service.ts**: Todo関連のRedux操作をカプセル化するサービス。
+- **src/app/services/todo/todo-selector.service.ts**: Todoのセレクター機能を提供するサービス。ストアの変更を検知し、コンポーネントに必要なデータを提供します。
 
 ## 画面説明
 
