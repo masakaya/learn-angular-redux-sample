@@ -21,33 +21,33 @@ const initialState: AuthState = {
 // Define the auth reducer using createReducer
 export const authReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(AuthActions.LOGIN_REQUEST, (state) => {
+    .addCase(AuthActions.loginRequest, (state) => {
       state.loading = true;
       state.error = null;
     })
-    .addCase(AuthActions.LOGIN_SUCCESS, (state, action) => {
+    .addCase(AuthActions.loginSuccess, (state, action) => {
       state.token = action.payload.token;
       state.loading = false;
       state.error = null;
     })
-    .addCase(AuthActions.LOGIN_FAILURE, (state, action) => {
+    .addCase(AuthActions.loginFailure, (state, action) => {
       state.loading = false;
       state.error = action.payload.error;
     })
-    .addCase(AuthActions.LOAD_USER_REQUEST, (state) => {
+    .addCase(AuthActions.loadUserRequest, (state) => {
       state.loading = true;
       state.error = null;
     })
-    .addCase(AuthActions.LOAD_USER_SUCCESS, (state, action) => {
+    .addCase(AuthActions.loadUserSuccess, (state, action) => {
       state.user = action.payload.user;
       state.loading = false;
       state.error = null;
     })
-    .addCase(AuthActions.LOAD_USER_FAILURE, (state, action) => {
+    .addCase(AuthActions.loadUserFailure, (state, action) => {
       state.loading = false;
       state.error = action.payload.error;
     })
-    .addCase(AuthActions.LOGOUT, (state) => {
+    .addCase(AuthActions.logout, (state) => {
       // Reset to initial state
       return initialState;
     });

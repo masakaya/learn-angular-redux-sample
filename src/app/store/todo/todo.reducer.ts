@@ -17,13 +17,13 @@ const initialState: TodoState = {
 // Define the todo reducer using createReducer
 export const todoReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(TodoActions.LOAD_TODOS, (state, action) => {
+    .addCase(TodoActions.loadTodos, (state, action) => {
       state.todos = action.payload.todos;
       state.nextId = action.payload.todos.length > 0
         ? Math.max(...action.payload.todos.map(todo => todo.id)) + 1
         : 1;
     })
-    .addCase(TodoActions.ADD_TODO, (state, action) => {
+    .addCase(TodoActions.addTodo, (state, action) => {
       const newTodo: Todo = {
         id: state.nextId,
         title: action.payload.title.trim(),
@@ -32,13 +32,13 @@ export const todoReducer = createReducer(initialState, (builder) => {
       state.todos.push(newTodo);
       state.nextId += 1;
     })
-    .addCase(TodoActions.TOGGLE_TODO, (state, action) => {
+    .addCase(TodoActions.toggleTodo, (state, action) => {
       const todo = state.todos.find(todo => todo.id === action.payload.id);
       if (todo) {
         todo.completed = !todo.completed;
       }
     })
-    .addCase(TodoActions.DELETE_TODO, (state, action) => {
+    .addCase(TodoActions.deleteTodo, (state, action) => {
       state.todos = state.todos.filter(todo => todo.id !== action.payload.id);
     });
 });
